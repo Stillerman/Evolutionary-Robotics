@@ -19,6 +19,7 @@ class SIMULATION:
             p.stepSimulation()
 
             self.robot.sense(t)
+            self.robot.think(t)
             self.robot.act(t)
 
     def __del__(self):

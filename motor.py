@@ -18,11 +18,11 @@ class MOTOR:
 
         pass
 
-    def update(self, t):
+    def update(self, desiredAngle):
         pyrosim.Set_Motor_For_Joint(
             bodyIndex = self.robotId,
             jointName = self.jointName,
             controlMode = p.POSITION_CONTROL,
-            targetPosition = self.targetAngles[t],
+            targetPosition = desiredAngle,
             maxForce = 50 # 500 NM
         )
