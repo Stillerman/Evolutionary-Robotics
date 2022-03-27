@@ -14,6 +14,9 @@ class ROBOT:
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
 
+    def get_fitness(self):
+        x, y, z = p.getLinkState(self.robotId, 0)[0]
+        return x
 
     def Prepare_To_Sense(self):
         self.sensors = {}
