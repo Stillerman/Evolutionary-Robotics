@@ -1,4 +1,5 @@
 import os
+import constants as c
 from motor import MOTOR
 import pybullet as p
 import pyrosim.pyrosim as pyrosim
@@ -41,5 +42,5 @@ class ROBOT:
         for neuron in self.nn.neurons.values():
             if(neuron.Is_Motor_Neuron()):
                 jointName = neuron.Get_Joint_Name()
-                desiredAngle = neuron.Get_Value()
+                desiredAngle = neuron.Get_Value() * c.motorJointRange
                 self.motors[jointName].update(desiredAngle)

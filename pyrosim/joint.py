@@ -18,7 +18,6 @@ class JOINT:
 
     def Save(self,f,jointAxis):
 
-        print ("Saving with jointAxis = ", jointAxis)
         Save_Whitespace(self.depth,f)
         f.write('<joint name="' + self.name + '" type="' + self.type + '">' + '\n')
 

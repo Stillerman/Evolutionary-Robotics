@@ -19,7 +19,7 @@ class Solution:
         self.weights[row, col] = random() * 2 - 1
         self.setup()
 
-    def evaluate(self, show=False, debug = True):
+    def evaluate(self, show=False, debug = False):
         self.setup()
         # print("evaluating with weights", self.weights)
         os.system(
@@ -31,6 +31,8 @@ class Solution:
         while not os.path.exists(fitnessFileName):
             time.sleep(0.1)
             # print("waiting for", fitnessFileName)
+
+        time.sleep(0.1)
         with open(fitnessFileName, "r") as f:
             line = f.readline()
             _, fStr = line.split(":")
@@ -62,7 +64,7 @@ class Solution:
             child="LowerBackLeg",
             type="revolute",
             position=[0,-1,0],
-            jointAxis="0 0 1"
+            jointAxis="1 0 0"
         )
 
         pyrosim.Send_Cube(name="LowerBackLeg", pos=[0,0,-0.5], size=[0.25,0.25,1])
@@ -85,7 +87,7 @@ class Solution:
             child="LowerFrontLeg",
             type="revolute",
             position=[0,1,0],
-            jointAxis="0 0 1"
+            jointAxis="1 0 0"
         )
 
         pyrosim.Send_Cube(name="LowerFrontLeg", pos=[0,0,-0.5], size=[0.25,0.25,1])
@@ -108,7 +110,7 @@ class Solution:
             child="LowerLeftLeg",
             type="revolute",
             position=[-1,0,0],
-            jointAxis="0 0 1"
+            jointAxis="0 1 0"
         )
 
         pyrosim.Send_Cube(name="LowerLeftLeg", pos=[0,0,-0.5], size=[0.25,0.25,1])
@@ -132,7 +134,7 @@ class Solution:
             child="LowerRightLeg",
             type="revolute",
             position=[1,0,0],
-            jointAxis="0 0 1"
+            jointAxis="0 1 0"
         )
 
         pyrosim.Send_Cube(name="LowerRightLeg", pos=[0,0,-0.5], size=[0.25,0.25,1])
@@ -142,14 +144,24 @@ class Solution:
 
     def Generate_Brain(self):
         pyrosim.Start_NeuralNetwork(f"brain-{self.id}.nndf")
-        pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
-        pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
-        pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")
-        pyrosim.Send_Sensor_Neuron(name=3, linkName="LeftLeg")
+        # pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
+        # pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
+        # pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")
+        # pyrosim.Send_Sensor_Neuron(name=3, linkName="LeftLeg")
+        # pyrosim.Send_Sensor_Neuron(name=4, linkName="RightLeg")
+        pyrosim.Send_Sensor_Neuron(name=0, linkName="LowerBackLeg")
+        pyrosim.Send_Sensor_Neuron(name=1, linkName="LowerFrontLeg")
+        pyrosim.Send_Sensor_Neuron(name=2, linkName="LowerLeftLeg")
+        pyrosim.Send_Sensor_Neuron(name=3, linkName="LowerRightLeg")
 
         pyrosim.Send_Motor_Neuron(name=4, jointName="Torso_BackLeg")
         pyrosim.Send_Motor_Neuron(name=5, jointName="Torso_FrontLeg")
         pyrosim.Send_Motor_Neuron(name=6, jointName="Torso_LeftLeg")
+        pyrosim.Send_Motor_Neuron(name=7, jointName="Torso_RightLeg")
+        pyrosim.Send_Motor_Neuron(name=8, jointName="BackLeg_LowerBackLeg")
+        pyrosim.Send_Motor_Neuron(name=9, jointName="FrontLeg_LowerFrontLeg")
+        pyrosim.Send_Motor_Neuron(name=10, jointName="LeftLeg_LowerLeftLeg")
+        pyrosim.Send_Motor_Neuron(name=11, jointName="RightLeg_LowerRightLeg")
 
         for sensor_idx in range(c.numSensorNeurons):
             for motor_idx in range(c.numMotorNeurons):
