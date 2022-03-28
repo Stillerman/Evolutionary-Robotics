@@ -6,7 +6,7 @@ from copy import deepcopy
 import os
 
 class ParallelHillClimber:
-    def __init__(self, popSize=10):
+    def __init__(self, popSize=1):
         self.parents = {}
         self.parentsFitness = {}
         self.popSize = popSize
@@ -30,7 +30,7 @@ class ParallelHillClimber:
         children = {}
         childrensFitness = {}
 
-        for gen in range(10 + 1):
+        for gen in range(1):
             print(f"\t\t GEN - {gen}")
             for pid, parent in self.parents.items():
                 children[pid] = deepcopy(parent)
