@@ -9,13 +9,14 @@ import sys
 
 class SIMULATION:
     def __init__(self):
-        mode = p.DIRECT if sys.argv[1].lower() == "direct" else p.GUI
+        self.id = sys.argv[1]
+        mode = p.DIRECT if sys.argv[2].lower() == "direct" else p.GUI
 
         self.physicsClient = p.connect(mode)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
         self.world = WORLD()
-        self.robot = ROBOT()
+        self.robot = ROBOT(self.id)
 
     def run(self):
         for t in range(c.simulationSteps):

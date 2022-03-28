@@ -7,7 +7,8 @@ import os
 
 
 class Solution:
-    def __init__(self):
+    def __init__(self, id: str):
+        self.id = id
         self.weights = np.random.rand(3, 2) * 2 - 1
         self.setup()
 
@@ -20,9 +21,14 @@ class Solution:
     def evaluate(self, show=False):
         self.setup()
         # print("evaluating with weights", self.weights)
-        os.system(f"python simulate.py {'GUI' if show else 'DIRECT'} > /dev/null 2> /dev/null")
-        time.sleep(0.5)
-        with open("fitness.txt", "r") as f:
+        os.system(f"python simulate.py {self.id} {'GUI' if show else 'DIRECT'} > /dev/null 2> /dev/null &")
+
+    def wait_for_sim_to_end(self):
+        fitnessFileName = f"fitness-{self.id}.txt"
+        while not os.path.exists(fitnessFileName):
+            time.sleep(0.1)
+            # print("waiting for", fitnessFileName)
+        with open(fitnessFileName, "r") as f:
             line = f.readline()
             _, fStr = line.split(":")
             return float(fStr)
@@ -57,8 +63,7 @@ class Solution:
         pyrosim.End()
 
     def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
-
+        pyrosim.Start_NeuralNetwork(f"brain-{self.id}.nndf")
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
         pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")
