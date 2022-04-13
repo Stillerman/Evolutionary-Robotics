@@ -85,6 +85,14 @@ class NEURAL_NETWORK:
 
         print("")
 
+    def get_sensor_neuron_values(self):
+        values = []
+        for neuronName in sorted(self.neurons):
+            if self.neurons[neuronName].Is_Sensor_Neuron():
+                values.append(self.neurons[neuronName].Get_Value())
+        return values
+
+
     def Print_Hidden_Neuron_Values(self):
 
         print("hidden neuron values: " , end = "" )

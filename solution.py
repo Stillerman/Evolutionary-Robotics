@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json
 import numpy as np
 import time
 from numpy.random import randint, random
@@ -8,35 +9,40 @@ import constants as c
 
 
 class Solution:
-    def __init__(self, id: str):
+    def __init__(self, id: str, gen: int):
         self.id = id
+        self.gen = gen
         self.weights = np.random.rand(c.numSensorNeurons, c.numMotorNeurons) * 2 - 1
         self.setup()
 
-    def mutate(self):
+    def mutate(self, gen):
         row = randint(0, c.numSensorNeurons)
         col = randint(0, c.numMotorNeurons)
         self.weights[row, col] = random() * 2 - 1
+        self.gen = gen
         self.setup()
 
     def evaluate(self, show=False, debug = False):
         self.setup()
         # print("evaluating with weights", self.weights)
+        os.system(f"rm phenotypes/pheno-gen-{self.gen}-species-{self.id}.json")
         os.system(
-            f"python simulate.py {self.id} {'GUI' if show else 'DIRECT'} {'> /dev/null 2> /dev/null' if not debug else ''} &"
+            f"python simulate.py {self.id} {self.gen} {'GUI' if show else 'DIRECT'} {'> /dev/null 2> /dev/null' if not debug else ''} &"
         )
 
     def wait_for_sim_to_end(self):
-        fitnessFileName = f"fitness-{self.id}.txt"
+        fitnessFileName = f"phenotypes/pheno-gen-{self.gen}-species-{self.id}.json"
         while not os.path.exists(fitnessFileName):
             time.sleep(0.1)
             # print("waiting for", fitnessFileName)
 
         time.sleep(0.1)
         with open(fitnessFileName, "r") as f:
-            line = f.readline()
-            _, fStr = line.split(":")
-            return float(fStr)
+            phenotype = json.load(f)
+            return float(phenotype["fitness"])
+            # line = f.readline()
+            # _, fStr = line.split(":")
+            # return float(fStr)
 
     def setup(self):
         self.Create_World()
@@ -139,11 +145,10 @@ class Solution:
 
         pyrosim.Send_Cube(name="LowerRightLeg", pos=[0,0,-0.5], size=[0.25,0.25,1])
 
-
         pyrosim.End()
 
     def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork(f"brain-{self.id}.nndf")
+        pyrosim.Start_NeuralNetwork(f"brain-{self.id}-{self.gen}.nndf")
         # pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         # pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
         # pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")

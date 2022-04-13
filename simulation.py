@@ -10,13 +10,16 @@ import sys
 class SIMULATION:
     def __init__(self):
         self.id = sys.argv[1]
-        mode = p.DIRECT if sys.argv[2].lower() == "direct" else p.GUI
+        self.gen = sys.argv[2]
+        print ("SIMULATING", self.id, self.gen)
+        
+        mode = p.DIRECT if sys.argv[3].lower() == "direct" else p.GUI
 
         self.physicsClient = p.connect(mode)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
         self.world = WORLD()
-        self.robot = ROBOT(self.id)
+        self.robot = ROBOT(self.id, self.gen)
 
     def run(self):
         for t in range(c.simulationSteps):
@@ -31,3 +34,6 @@ class SIMULATION:
 
     def get_fitness(self):
         return self.robot.get_fitness()
+
+    def get_phenotype(self):
+        return self.robot.get_phenotype()

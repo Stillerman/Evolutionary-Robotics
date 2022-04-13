@@ -3,4 +3,4 @@ simulationSteps = 1000
 gaitSteps = 5
 numMotorNeurons = 8
 numSensorNeurons = 4
-motorJointRange = 0.2
+motorJointRange = 0.4

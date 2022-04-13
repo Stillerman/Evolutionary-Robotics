@@ -9,6 +9,3 @@ class SENSOR:
 
     def getValue(self):
         return pyrosim.Get_Touch_Sensor_Value_For_Link(self.linkName)
-
-    def __del__(self):
-        np.save(f"data/{self.linkName}SensorValues.npy", self.values)

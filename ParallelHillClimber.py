@@ -5,6 +5,20 @@ from solution import Solution
 from copy import deepcopy
 import os
 
+# class ParallelHillClimber:
+#     def __init__(self):
+#         soln1 = Solution(id=0, gen=0)
+#         soln1.evaluate()
+#         fitness = soln1.wait_for_sim_to_end()
+
+#         soln2 = deepcopy(soln1)
+#         soln2.mutate()
+#         soln2.evaluate()
+
+#         fitness2 = soln2.wait_for_sim_to_end()
+
+#         print(fitness, fitness2)
+
 class ParallelHillClimber:
     def __init__(self, popSize=10):
         self.parents = {}
@@ -12,15 +26,17 @@ class ParallelHillClimber:
         self.popSize = popSize
         print("Init Parallel Hill climber")
         for i in  range(self.popSize):
-            self.parents[i] = Solution(id = str(i))
+            self.parents[i] = Solution(id = str(i), gen = 0)
 
         # self.parent.evaluate(show=True)
         self.evolve()
 
     def evolve(self):
-        os.system("rm fitness-*.txt")
+        # print("pre")
         for i, parent in self.parents.items():
-            parent.evaluate(show=False)
+            # print("Evaluing", i)
+            parent.evaluate(show=False, debug = False)
+
 
         for i, parent in self.parents.items():
             fitness = parent.wait_for_sim_to_end()
@@ -30,15 +46,16 @@ class ParallelHillClimber:
         children = {}
         childrensFitness = {}
 
-        for gen in range(10 + 1):
+        for gen in range(1, 25):
+            # input(f"Train Gen {gen}?")
             print(f"\t\t GEN - {gen}")
+            
             for pid, parent in self.parents.items():
                 children[pid] = deepcopy(parent)
-                children[pid].mutate()
+                children[pid].mutate(gen)
 
-            os.system("rm fitness-*.txt")
             for i, child in children.items():
-                child.evaluate(show=False)
+                child.evaluate(show=False, debug=False)
 
             for i, child in children.items():
                 fitness = child.wait_for_sim_to_end()
@@ -63,7 +80,7 @@ class ParallelHillClimber:
                 bestParent = i
 
         print(f"Showing species {bestParent} with fitness {bestFitness}")
-        self.parents[bestParent].evaluate(show=True)
+        self.parents[bestParent].evaluate(show=True, debug=True)
         # for i in range(15):
         #     fit = self.evolve_one_gen()
         #     print(f"Gen {i} done with fitness {fit}")
