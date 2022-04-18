@@ -20,6 +20,7 @@ class ROBOT:
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         self.sense_hist = []
+        self.leg_hist = []
 
     def get_fitness(self):
         x, y, z = p.getLinkState(self.robotId, 0)[0]
@@ -44,7 +45,8 @@ class ROBOT:
              "y": y,
              "z": z,
              "fitness": fitness,
-             "sense_hist": self.sense_hist
+             "sense_hist": self.sense_hist,
+             "leg_hist": self.leg_hist
          }
 
 
@@ -63,6 +65,7 @@ class ROBOT:
         for (linkName, sensor) in self.sensors.items():
             sensor.values[t] = sensor.getValue()
         self.sense_hist.append(np.asarray(self.nn.get_sensor_neuron_values()).sum())
+        self.leg_hist.append(self.nn.get_sensor_neuron_values())
 
     def think(self, t):
         self.nn.Update()
