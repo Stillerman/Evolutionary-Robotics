@@ -20,13 +20,13 @@ import os
 #         print(fitness, fitness2)
 
 class ParallelHillClimber:
-    def __init__(self, popSize=10):
+    def __init__(self, popSize=15, useHidden=False):
         self.parents = {}
         self.parentsFitness = {}
         self.popSize = popSize
         print("Init Parallel Hill climber")
         for i in  range(self.popSize):
-            self.parents[i] = Solution(id = str(i), gen = 0)
+            self.parents[i] = Solution(id = str(i) + "-" + ("hidden" if useHidden else "no-hidden"), gen = 0, useHidden=useHidden)
 
         # self.parent.evaluate(show=True)
         self.evolve()
@@ -46,7 +46,7 @@ class ParallelHillClimber:
         children = {}
         childrensFitness = {}
 
-        for gen in range(1, 25):
+        for gen in range(1, 15):
             # input(f"Train Gen {gen}?")
             print(f"\t\t GEN - {gen}")
             
