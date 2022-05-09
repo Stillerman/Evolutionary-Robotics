@@ -6,4 +6,5 @@ from ParallelHillClimber import ParallelHillClimber
 #    os.system("python simulate.py")
 
 # hc = HillClimber()
-phc = ParallelHillClimber()
+one = ParallelHillClimber(popSize=20, useHidden=True)
+two = ParallelHillClimber(popSize=20, useHidden=False)

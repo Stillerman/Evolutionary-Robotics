@@ -51,8 +51,15 @@ class Solution:
             # print("waiting for", fitnessFileName)
 
         time.sleep(0.1)
-        with open(fitnessFileName, "r") as f:
+        with open(fitnessFileName, "r+") as f:
             phenotype = json.load(f)
+            phenotype['w1'] = self.w1.tolist()
+            phenotype['w2'] = self.w2.tolist()
+            phenotype['w3'] = self.w3.tolist()
+            f.seek(0)  # <--- should reset file position to the beginning.
+            json.dump(phenotype, f)
+            f.truncate()
+
             return float(phenotype["fitness"])
             # line = f.readline()
             # _, fStr = line.split(":")

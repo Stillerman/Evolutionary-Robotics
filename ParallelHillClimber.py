@@ -20,7 +20,7 @@ import os
 #         print(fitness, fitness2)
 
 class ParallelHillClimber:
-    def __init__(self, popSize=10, useHidden=True):
+    def __init__(self, popSize=20, useHidden=True):
         self.parents = {}
         self.parentsFitness = {}
         self.popSize = popSize
@@ -46,7 +46,7 @@ class ParallelHillClimber:
         children = {}
         childrensFitness = {}
 
-        for gen in range(1, 2):
+        for gen in range(1, 25):
             # input(f"Train Gen {gen}?")
             print(f"\t\t GEN - {gen}")
             
