@@ -20,7 +20,7 @@ import os
 #         print(fitness, fitness2)
 
 class ParallelHillClimber:
-    def __init__(self, popSize=15, useHidden=False):
+    def __init__(self, popSize=10, useHidden=True):
         self.parents = {}
         self.parentsFitness = {}
         self.popSize = popSize
@@ -46,7 +46,7 @@ class ParallelHillClimber:
         children = {}
         childrensFitness = {}
 
-        for gen in range(1, 15):
+        for gen in range(1, 2):
             # input(f"Train Gen {gen}?")
             print(f"\t\t GEN - {gen}")
             
@@ -80,7 +80,7 @@ class ParallelHillClimber:
                 bestParent = i
 
         print(f"Showing species {bestParent} with fitness {bestFitness}")
-        self.parents[bestParent].evaluate(show=True, debug=True)
+        self.parents[bestParent].evaluate(show=True, debug=False)
         # for i in range(15):
         #     fit = self.evolve_one_gen()
         #     print(f"Gen {i} done with fitness {fit}")
